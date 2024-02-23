@@ -1,12 +1,13 @@
-"""
-   Use to create your own functions for reuse 
-   across the assignment
+#!/usr/bin/env python
+# coding: utf-8
 
-   Inside part_1_template_solution.py, 
-  
-     import new_utils
-  
-    or
-  
-     import new_utils as nu
-"""
+# In[ ]:
+
+
+# new_utils.py
+
+def scale_data(X):
+    return X / 255.0
+
+
+
