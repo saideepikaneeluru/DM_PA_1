@@ -356,105 +356,105 @@ class Section1:
          5) max_features 
     """
 
-#     def partG(
-#         self,
-#         X: NDArray[np.floating],
-#         y: NDArray[np.int32],
-#         Xtest: NDArray[np.floating],
-#         ytest: NDArray[np.int32],
-#     ) -> dict[str, Any]:
-#         """
-#         Perform classification using the given classifier and cross validator.
+    def partG(
+        self,
+        X: NDArray[np.floating],
+        y: NDArray[np.int32],
+        Xtest: NDArray[np.floating],
+        ytest: NDArray[np.int32],
+    ) -> dict[str, Any]:
+        """
+        Perform classification using the given classifier and cross validator.
 
-#         Parameters:
-#         - clf: The classifier instance to use for classification.
-#         - cv: The cross validator instance to use for cross validation.
-#         - X: The test data.
-#         - y: The test labels.
-#         - n_splits: The number of splits for cross validation. Default is 5.
+        Parameters:
+        - clf: The classifier instance to use for classification.
+        - cv: The cross validator instance to use for cross validation.
+        - X: The test data.
+        - y: The test labels.
+        - n_splits: The number of splits for cross validation. Default is 5.
 
-#         Returns:
-#         - y_pred: The predicted labels for the test data.
+        Returns:
+        - y_pred: The predicted labels for the test data.
 
-#         Note:
-#         This function is not fully implemented yet.
-#         """
+        Note:
+        This function is not fully implemented yet.
+        """
 
-#         # refit=True: fit with the best parameters when complete
-#         # A test should look at best_index_, best_score_ and best_params_
-#         """
-#         List of parameters you are allowed to vary. Choose among them.
-#          1) criterion,
-#          2) max_depth,
-#          3) min_samples_split, 
-#          4) min_samples_leaf,
-#          5) max_features 
-#          5) n_estimators
-#         """
+        # refit=True: fit with the best parameters when complete
+        # A test should look at best_index_, best_score_ and best_params_
+        """
+        List of parameters you are allowed to vary. Choose among them.
+         1) criterion,
+         2) max_depth,
+         3) min_samples_split, 
+         4) min_samples_leaf,
+         5) max_features 
+         5) n_estimators
+        """
 
-#         answer = {}
+        answer = {}
 
-#         # Enter your code, construct the `answer` dictionary, and return it.
+        # Enter your code, construct the `answer` dictionary, and return it.
 
-#         """
-#            `answer`` is a dictionary with the following keys: 
+        """
+           `answer`` is a dictionary with the following keys: 
             
-#             "clf", base estimator (classifier model) class instance
-#             "default_parameters",  dictionary with default parameters 
-#                                    of the base estimator
-#             "best_estimator",  classifier class instance with the best
-#                                parameters (read documentation)
-#             "grid_search",  class instance of GridSearchCV, 
-#                             used for hyperparameter search
-#             "mean_accuracy_cv",  mean accuracy score from cross 
-#                                  validation (which is used by GridSearchCV)
-#             "confusion_matrix_train_orig", confusion matrix of training 
-#                                            data with initial estimator 
-#                                 (rows: true values, cols: predicted values)
-#             "confusion_matrix_train_best", confusion matrix of training data 
-#                                            with best estimator
-#             "confusion_matrix_test_orig", confusion matrix of test data
-#                                           with initial estimator
-#             "confusion_matrix_test_best", confusion matrix of test data
-#                                             with best estimator
-#             "accuracy_orig_full_training", accuracy computed from `confusion_matrix_train_orig'
-#             "accuracy_best_full_training"
-#             "accuracy_orig_full_testing"
-#             "accuracy_best_full_testing"
+            "clf", base estimator (classifier model) class instance
+            "default_parameters",  dictionary with default parameters 
+                                   of the base estimator
+            "best_estimator",  classifier class instance with the best
+                               parameters (read documentation)
+            "grid_search",  class instance of GridSearchCV, 
+                            used for hyperparameter search
+            "mean_accuracy_cv",  mean accuracy score from cross 
+                                 validation (which is used by GridSearchCV)
+            "confusion_matrix_train_orig", confusion matrix of training 
+                                           data with initial estimator 
+                                (rows: true values, cols: predicted values)
+            "confusion_matrix_train_best", confusion matrix of training data 
+                                           with best estimator
+            "confusion_matrix_test_orig", confusion matrix of test data
+                                          with initial estimator
+            "confusion_matrix_test_best", confusion matrix of test data
+                                            with best estimator
+            "accuracy_orig_full_training", accuracy computed from `confusion_matrix_train_orig'
+            "accuracy_best_full_training"
+            "accuracy_orig_full_testing"
+            "accuracy_best_full_testing"
                
-#         """
-
-#         return answer
-# Part G of Section1 in part_1_template_solution.py
-
-    def partG(self, X, y, Xtest, ytest):
-        param_grid = {
-            'criterion': ['gini', 'entropy'],
-            'max_depth': [None, 10, 20, 30],
-            'min_samples_split': [2, 5, 10],
-            'min_samples_leaf': [1, 2, 4],
-            'max_features': ['auto', 'sqrt', 'log2'],
-            'n_estimators': [100, 200, 300]
-        }
-
-        clf = RandomForestClassifier(random_state=self.seed)
-        grid_search = GridSearchCV(clf, param_grid, cv=5, scoring='accuracy')
-        grid_search.fit(X, y)
-
-        best_clf = grid_search.best_estimator_
-        y_pred_train = best_clf.predict(X)
-        y_pred_test = best_clf.predict(Xtest)
-
-        answer = {
-            "clf": clf,
-            "default_parameters": clf.get_params(),
-            "best_estimator": best_clf,
-            "grid_search": grid_search,
-            "mean_accuracy_cv": grid_search.best_score_,
-            "confusion_matrix_train_best": confusion_matrix(y, y_pred_train),
-            "confusion_matrix_test_best": confusion_matrix(ytest, y_pred_test),
-            "accuracy_best_full_training": np.mean(y_pred_train == y),
-            "accuracy_best_full_testing": np.mean(y_pred_test == ytest)
-        }
+        """
 
         return answer
+# Part G of Section1 in part_1_template_solution.py
+
+    # def partG(self, X, y, Xtest, ytest):
+    #     param_grid = {
+    #         'criterion': ['gini', 'entropy'],
+    #         'max_depth': [None, 10, 20, 30],
+    #         'min_samples_split': [2, 5, 10],
+    #         'min_samples_leaf': [1, 2, 4],
+    #         'max_features': ['auto', 'sqrt', 'log2'],
+    #         'n_estimators': [100, 200, 300]
+    #     }
+
+    #     clf = RandomForestClassifier(random_state=self.seed)
+    #     grid_search = GridSearchCV(clf, param_grid, cv=5, scoring='accuracy')
+    #     grid_search.fit(X, y)
+
+    #     best_clf = grid_search.best_estimator_
+    #     y_pred_train = best_clf.predict(X)
+    #     y_pred_test = best_clf.predict(Xtest)
+
+    #     answer = {
+    #         "clf": clf,
+    #         "default_parameters": clf.get_params(),
+    #         "best_estimator": best_clf,
+    #         "grid_search": grid_search,
+    #         "mean_accuracy_cv": grid_search.best_score_,
+    #         "confusion_matrix_train_best": confusion_matrix(y, y_pred_train),
+    #         "confusion_matrix_test_best": confusion_matrix(ytest, y_pred_test),
+    #         "accuracy_best_full_training": np.mean(y_pred_train == y),
+    #         "accuracy_best_full_testing": np.mean(y_pred_test == ytest)
+    #     }
+
+    #     return answer
