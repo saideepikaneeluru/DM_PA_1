@@ -355,7 +355,6 @@ class Section1:
          4) min_samples_leaf, 
          5) max_features 
     """
-
     def partG(
         self,
         X: NDArray[np.floating],
@@ -391,8 +390,80 @@ class Section1:
          5) max_features 
          5) n_estimators
         """
+        param_grid = {
+        'criterion': ['gini', 'entropy'],
+        'max_depth': [10, 20, 30],
+        'min_samples_split': [2, 5, 10],
+        'min_samples_leaf': [1, 2, 4],
+        'max_features': ['sqrt', 'log2'],
+        #"n_estimators":[50,100,200]
+        }
+        cv = ShuffleSplit(n_splits=5, random_state=self.seed)
+        rf = RandomForestClassifier(random_state=42)
+        rf.fit(X,y)
+        # Predictions with the initial model
+        y_train_pred_orig = rf.predict(X)
+        y_test_pred_orig = rf.predict(Xtest)
 
-        answer = {}
+        # Confusion matrices
+        conf_matrix_train_orig = confusion_matrix(y, y_train_pred_orig)
+        conf_matrix_test_orig = confusion_matrix(ytest, y_test_pred_orig)
+
+        # Accuracies
+        accuracy_train_orig = nu.accuracy(conf_matrix_train_orig)#accuracy_score(y, y_train_pred_orig)
+        accuracy_test_orig = nu.accuracy(conf_matrix_test_orig)#accuracy_score(ytest, y_test_pred_orig)
+
+# Initialize GridSearchCV
+        grid_search = GridSearchCV(estimator=rf, param_grid=param_grid, cv=cv, scoring='accuracy')
+
+        # Perform grid search
+        grid_search.fit(X, y)
+        best_clf = grid_search.best_estimator_
+        accuracy = best_clf.score(Xtest,ytest)
+        # print('%'*20)
+        # print(best_clf)
+        # Predictions with the optimized model
+        # y_train_pred_best = best_clf.predict(X)
+        # y_test_pred_best = best_clf.predict(Xtest)
+
+        mean_test_scores = grid_search.cv_results_['mean_test_score']
+        # Calculate the mean accuracy
+        mean_accuracy = mean_test_scores.mean()
+        best_rf_clf = best_clf
+        #best_rf_clf.fit(X,y)
+        y_train_pred_best = best_rf_clf.predict(X)
+        y_test_pred_best = best_rf_clf.predict(Xtest)
+
+        # y_train_pred_best = best_clf.predict(X)
+        # y_test_pred_best = best_clf.predict(Xtest)
+
+        # Confusion matrices
+        conf_matrix_train_best = confusion_matrix(y, y_train_pred_best)
+        conf_matrix_test_best = confusion_matrix(ytest, y_test_pred_best)
+
+        # Accuracies
+        accuracy_train_best = nu.accuracy(conf_matrix_train_best) #accuracy_score(y, y_train_pred_best)
+        accuracy_test_best = nu.accuracy(conf_matrix_test_best) #accuracy_score(ytest, y_test_pred_best)
+
+
+        answer = {
+    "clf": rf,
+    "default_parameters": rf.get_params(),
+    "best_estimator": best_clf,
+    "grid_search": grid_search,
+    "mean_accuracy_cv": mean_accuracy,
+    "confusion_matrix_train_orig": conf_matrix_train_orig,
+    "confusion_matrix_train_best": conf_matrix_train_best,
+    "confusion_matrix_test_orig": conf_matrix_test_orig,
+    "confusion_matrix_test_best": conf_matrix_test_best,
+    "accuracy_orig_full_training": accuracy_train_orig,
+    "accuracy_best_full_training": accuracy_train_best,
+    "accuracy_orig_full_testing": accuracy_test_orig,
+    "accuracy_best_full_testing": accuracy_test_best,
+}
+
+# Now, you can print or return the answer dictionary.
+
 
         # Enter your code, construct the `answer` dictionary, and return it.
 
@@ -423,38 +494,5 @@ class Section1:
             "accuracy_best_full_testing"
                
         """
-
+        # The mean accuracy of Cross validation is around 65% where as when the model trained on the enitre set, It has an 100% acccuracy, So it is higher than that of the mean accuracy of CV.
         return answer
-# Part G of Section1 in part_1_template_solution.py
-
-    # def partG(self, X, y, Xtest, ytest):
-    #     param_grid = {
-    #         'criterion': ['gini', 'entropy'],
-    #         'max_depth': [None, 10, 20, 30],
-    #         'min_samples_split': [2, 5, 10],
-    #         'min_samples_leaf': [1, 2, 4],
-    #         'max_features': ['auto', 'sqrt', 'log2'],
-    #         'n_estimators': [100, 200, 300]
-    #     }
-
-    #     clf = RandomForestClassifier(random_state=self.seed)
-    #     grid_search = GridSearchCV(clf, param_grid, cv=5, scoring='accuracy')
-    #     grid_search.fit(X, y)
-
-    #     best_clf = grid_search.best_estimator_
-    #     y_pred_train = best_clf.predict(X)
-    #     y_pred_test = best_clf.predict(Xtest)
-
-    #     answer = {
-    #         "clf": clf,
-    #         "default_parameters": clf.get_params(),
-    #         "best_estimator": best_clf,
-    #         "grid_search": grid_search,
-    #         "mean_accuracy_cv": grid_search.best_score_,
-    #         "confusion_matrix_train_best": confusion_matrix(y, y_pred_train),
-    #         "confusion_matrix_test_best": confusion_matrix(ytest, y_pred_test),
-    #         "accuracy_best_full_training": np.mean(y_pred_train == y),
-    #         "accuracy_best_full_testing": np.mean(y_pred_test == ytest)
-    #     }
-
-    #     return answer
